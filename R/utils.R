@@ -57,3 +57,21 @@ thisfile_knit <- function() {
 
     NULL
 }
+
+
+# get location of cache folder relative to source of R file setting up model cache
+# @param .cache_dir name of cache directory
+# @details
+# This should be run only from places where file is being sourced from a separate
+# script, or else will return the cache_dir relative to the working directory
+cache_location <- function(.cache_dir = ".modcache") {
+    file_location <- thisfile()
+    cache_dir_path <- normalizePath(
+        file.path(
+            ifelse(is.null(file_location), ".", dirname(file_location)),
+            .cache_dir
+        ),
+        mustWork = FALSE
+    )
+    return(cache_dir_path)
+}
