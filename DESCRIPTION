@@ -1,0 +1,18 @@
+Package: Overseer
+Type: Package
+Title: manage models across a project
+Version: 0.0.1
+Date: 2016-09-30
+Authors@R: c(
+    person("Devin", "Pastoor",
+    email = "devin.pastoor@gmail.com", role = c("aut", "cre")))
+Description: Collection of tools for managing models across project(s)
+Depends:
+    R (>= 3.3.0)
+Imports:
+    R6
+Suggests:
+    testthat
+License: MIT + file LICENSE
+VignetteBuilder: knitr
+RoxygenNote: 5.0.1
