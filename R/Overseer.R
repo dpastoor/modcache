@@ -14,18 +14,36 @@ Overseer <- R6Class("Overseer",
                         list(
                             initialize = function(
                                 cache_name = ".modelcache",
-                                relative_path = TRUE,
+                                dir = NULL, # where model files should be stored
                                 create_git_ignore = TRUE
                             ) {
-                            if (relative_path) {
+                            if (is.null(dir)) {
                                 cache_folder <- cache_location(cache_name)
                                 private$cache_location <<- cache_folder
+                                private$dir <<- dirname(cache_folder)
+                                message("model dir set to ", private$dir)
                                 message("cache location set to ", private$cache_location)
                                 if (!dir.exists(cache_folder)) {
                                     dir.create(cache_folder, recursive = TRUE)
                                 }
                             } else {
-                                private$cache_location <<- getwd()
+                                # if they are 'manually' setting a modeling dir, make sure it exists
+                                if (!dir.exists(dir)) {
+                                    stop(
+                                        paste(
+                                            "no directory detected at: ",
+                                            dir,
+                                            "please correct the path or create the folder"
+                                        )
+                                    )
+                                }
+                                dir_and_cache <- normalizePath(file.path(dir, cache_name))
+                                if (!dir.exists(dir_and_cache)) {
+                                    dir.create(dir_and_cache, recursive = TRUE)
+                                }
+                                private$cache_location <<- dir_and_cache
+                                message("model dir set to ", private$dir)
+                                message("cache location set to ", private$cache_location)
                             }
                             if (create_git_ignore) {
                                 potential_gitignore <- file.path(private$cache_location, ".gitignore")
