@@ -59,16 +59,21 @@ Overseer <- R6Class("Overseer",
                                 if (is.null(model_name)) {
                                     model_name <- deparse(substitute(model))
                                 }
-                                private$models[[model_name]] <<- model
+                                private$models[[model_name]] <<- mcode_cache(model_name, model, private$cache_location)
                             },
                             use = function(model_name) {
-
+                                if (is.numeric(model_name)) {
+                                    warning("be careful referencing models by index as changes could result in suble bugs,
+                                            suggest referring to models by name")
+                                }
+                                return(private_models[[model_name]])
                             },
                             list_models = function(details = FALSE) {
                                 names(private$models)
                             }
                         ),
                     private = list(
+                        dir = NULL,
                         cache_location = NULL,
                         models = list()
 
