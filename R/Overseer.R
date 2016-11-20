@@ -85,6 +85,17 @@ Overseer <- R6Class("Overseer",
                                     private$models[[.file]] <<- mread_cache(.file, project_dir, soloc = private$cache_location)
                                 }
                             },
+                            add_remote_model = function(.url) {
+                                model_name <- strip_ext(basename(.url))
+                                output_file <- file.path(private$dir, model_name)
+                                if (!file.exists(output_file)) {
+                                    message('fetching file from ', .url)
+                                    model_from_url <- httr::GET(.url)
+                                    write(rawToChar(model_from_url$content), file = paste0(output_file, ".cpp"))
+                                }
+                            self$add_model_file(model_name, model_name)
+
+                            },
                             use = function(model_name) {
                                 if (is.numeric(model_name)) {
                                     warning("be careful referencing models by index as changes could result in suble bugs,
