@@ -13,11 +13,14 @@ NULL
 Overseer <- R6Class("Overseer",
                     public =
                         list(
+                            verbose = NULL,
                             initialize = function(
                                 cache_name = ".modelcache",
                                 dir = NULL, # where model files should be stored
-                                create_git_ignore = TRUE
+                                create_git_ignore = TRUE,
+                                verbose = TRUE
                             ) {
+                                self$verbose <<- verbose
                             if (is.null(dir)) {
                                 ## cache folder set to same directory as the sourced script
                                 cache_folder <- cache_location(cache_name)
