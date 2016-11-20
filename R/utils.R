@@ -75,3 +75,8 @@ cache_location <- function(.cache_dir = ".modcache") {
     )
     return(cache_dir_path)
 }
+
+# strip extensions for files
+strip_ext <- function(.filepath) {
+    gsub("\\..+$", "", .filepath)
+}

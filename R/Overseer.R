@@ -75,14 +75,14 @@ Overseer <- R6Class("Overseer",
                                                                              soloc = private$cache_location)
                             },
                             add_model_directory = function(.dir = ".", pattern = "*.cpp") {
-                                cpp_files <- dir(.dir, pattern = pattern)
+                                cpp_files <- strip_ext(dir(.dir, pattern = pattern))
                                 project_dir <- normalizePath(file.path(private$dir, .dir))
-                                for (i in seq_along(files)) {
+                                for (i in seq_along(cpp_files)) {
                                     .file <- cpp_files[i]
-                                    if (verbose) {
+                                    if (self$verbose) {
                                         message('adding model ', .file)
                                     }
-                                    private$models[[model_name]] <<- mread_cache(.file, project_dir, soloc = private$cache_location)
+                                    private$models[[.file]] <<- mread_cache(.file, project_dir, soloc = private$cache_location)
                                 }
                             },
                             use = function(model_name) {
