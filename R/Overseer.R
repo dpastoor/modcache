@@ -1,5 +1,6 @@
 #' Model repository manager
 #' @importFrom R6 R6Class
+#' @importFrom mrgsolve mcode_cache
 #' @name Overseer
 #' @examples
 #' \dontrun{

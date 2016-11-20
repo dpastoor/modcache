@@ -2,3 +2,4 @@
 
 export(Overseer)
 importFrom(R6,R6Class)
+importFrom(mrgsolve,mcode_cache)
