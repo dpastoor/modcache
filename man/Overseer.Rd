@@ -8,7 +8,7 @@ Model repository manager
 }
 \examples{
 \dontrun{
-model_cache <- Overseer$new(".modcache") # relative path to where should cache files
+model_cache <- Overseer$new(".modcache") # folder name for the cache files
 model_cache$add_model("test")
 }
 }
