@@ -1,10 +1,10 @@
 #' Model repository manager
 #' @importFrom R6 R6Class
-#' @importFrom mrgsolve mcode_cache
+#' @importFrom mrgsolve mcode_cache mread_cache
 #' @name Overseer
 #' @examples
 #' \dontrun{
-#' model_cache <- Overseer$new(".modcache") # relative path to where should cache files
+#' model_cache <- Overseer$new(".modcache") # folder name for the cache files
 #' model_cache$add_model("test")
 #' }
 NULL
@@ -19,6 +19,7 @@ Overseer <- R6Class("Overseer",
                                 create_git_ignore = TRUE
                             ) {
                             if (is.null(dir)) {
+                                ## cache folder set to same directory as the sourced script
                                 cache_folder <- cache_location(cache_name)
                                 private$cache_location <<- cache_folder
                                 private$dir <<- dirname(cache_folder)
@@ -62,12 +63,20 @@ Overseer <- R6Class("Overseer",
                                 }
                                 private$models[[model_name]] <<- mcode_cache(model_name, model, private$cache_location)
                             },
+                            add_model_file = function(file, model_name = NULL) {
+                                if (is.null(model_name)) {
+                                    model_name <- basename(file)
+                                }
+                                private$models[[model_name]] <<- mread_cache(model_name,
+                                                                             private$dir,
+                                                                             soloc = private$cache_location)
+                            },
                             use = function(model_name) {
                                 if (is.numeric(model_name)) {
                                     warning("be careful referencing models by index as changes could result in suble bugs,
                                             suggest referring to models by name")
                                 }
-                                return(private_models[[model_name]])
+                                return(private$models[[model_name]])
                             },
                             list_models = function(details = FALSE) {
                                 names(private$models)
