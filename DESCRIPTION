@@ -1,4 +1,4 @@
-Package: Overseer
+Package: overseer
 Type: Package
 Title: manage models across a project
 Version: 0.0.1
