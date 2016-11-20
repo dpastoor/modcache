@@ -10,6 +10,7 @@ Description: Collection of tools for managing models across project(s)
 Depends:
     R (>= 3.3.0)
 Imports:
+    httr,
     R6
 Suggests:
     testthat
