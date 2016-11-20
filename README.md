@@ -15,7 +15,10 @@ overseer is a package to watch over your models and help you manage them.
 
 ### R file to manage all models - models.R
 
-Example file, called models.R but can be named anything
+Example file, called models.R but can be named anything. The most important thing
+is *the Overseer instance needs to be the last thing called on the last line*, so that it
+can be imported in by `source`ing the rscript.
+
 
 ```r
 library(overseer)
@@ -53,6 +56,10 @@ models <- source("path/to/models.R")$value
 # access models at any time with use
 models$use("one_cmt_f") %>%
     ev(amt = 100, cmt = 1) %>% mrgsim %>% plot
+
+one_cmt_f <- models$use("one_cmt_f")
+
+one_cmt_f %>% ev(amt = 200, cmt = 1) %>% mrgsim %>% plot
 ```
 
 For a super basic example, please see a [project example](https://github.com/dpastoor/example_overseer)
