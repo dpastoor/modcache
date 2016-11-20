@@ -25,9 +25,13 @@ Overseer <- R6Class("Overseer",
                                 ## cache folder set to same directory as the sourced script
                                 cache_folder <- cache_location(cache_name)
                                 private$cache_location <<- cache_folder
+                                ## also save dir that the cache is saved to
+                                ## which should be the directory the Overseer class is being sourced from
                                 private$dir <<- dirname(cache_folder)
-                                message("model dir set to ", private$dir)
-                                message("cache location set to ", private$cache_location)
+                                if (self$verbose) {
+                                    message("model dir set to ", private$dir)
+                                    message("cache location set to ", private$cache_location)
+                                }
                                 if (!dir.exists(cache_folder)) {
                                     dir.create(cache_folder, recursive = TRUE)
                                 }
