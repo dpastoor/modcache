@@ -5,7 +5,10 @@ overseer is a package to watch over your models and help you manage them.
 
 ## Why use overseer?
 
-* to have a unified api for dealing with many models across project(s) and from different sources
+* to have a unified api for dealing with many models across project(s) and from different sources. Currently support:
+    * inline code
+    * cpp files
+    * remote sources like github repositories (anything where an http request can be made to acquire the resource)
 * to handle the frustrating details of managing models/caches transparently
     * creation and maintenance of a cache (folder)
     * automatically sets up a gitignore in the cache folder to ignore cached files
