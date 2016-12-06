@@ -1,8 +1,8 @@
 Package: overseer
 Type: Package
 Title: manage models across a project
-Version: 0.0.1
-Date: 2016-09-30
+Version: 0.0.2
+Date: 2016-12-06
 Authors@R: c(
     person("Devin", "Pastoor",
     email = "devin.pastoor@gmail.com", role = c("aut", "cre")))
