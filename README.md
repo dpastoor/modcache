@@ -74,26 +74,29 @@ chunks interactively (in for example, models.R), the code will act on the curren
 working directory; however, when sourcing the models.R into other files, the Overseer
 initialization will source files relative to the file itself. This (potential) difference
 can cause some confusion. One way to protect yourself from accidentally running into that
-issue is to add a line such as the below:
+issue is a basic check function provided called `interactive_model_check`. This can
+be used at the top of the `models.R` file to halt progression in interactive
+contexts if a given file is not in the same directory, aka the directory is not
+normalized to what it will be when sourcing from elsewhere.
 
-Given we have a model called vanco_stockmann.cpp in the models folder at the same level
-as models.R where the overseer is created:
+For example, given we have a model called `vanco_stockmann.cpp` in the models folder
+at the same level as models.R where the overseer is created:
 
 ```
-if (interactive()) {
-  if (!file.exists("vanco_stockmann.cpp")) {
+library(overseer)
+
+if (!interactive_model_check("vanco_stockmann.cpp")) {
     stop("make sure the directory is set to the models directory before running interactively,
          to make sure the relative paths will be the same as when sourcing")
-  }
 }
 
 models <- Overseer$new()
 
-
 models$add_model_file("vanc_stockmann")
 ```
 
-The interactive call will make sure this is only run when the code is executed directly, and will
-make sure that it is at the proper directory location by checking for the direct existance
-for that file, and if it doesn't exist, likely due to an incorrect working directory, it will
-stop the code execution before initializing the Overseer instance.
+The interactive call will make sure this is only run when the code is executed
+directly, and will make sure that it is at the proper directory location by checking
+for the direct existance for that file, and if it doesn't exist, likely due to an
+incorrect working directory, it will stop the code execution before initializing
+the Overseer instance.
