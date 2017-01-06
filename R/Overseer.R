@@ -69,7 +69,7 @@ Overseer <- R6Class("Overseer",
                                     model_name <- deparse(substitute(model))
                                 }
                                 private$models[[model_name]] <<- list(
-                                    "model" = mcode_cache(model_name, model, private$cache_location),
+                                    "model" = mcode_cache(model_name, model, private$cache_location,soloc=private$cache_location),
                                     "model_path" = NULL
                                 )
                             },
