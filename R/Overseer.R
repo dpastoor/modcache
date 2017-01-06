@@ -102,7 +102,7 @@ Overseer <- R6Class("Overseer",
                                     if (self$verbose) {
                                         message('adding model ', .file)
                                     }
-                                    self$add_model_file(file.path(project_dir, .file))
+                                    self$add_model_file(file.path(.dir, .file))
                                 }
                             },
                             add_remote_model = function(.url, model_name = NULL) {
