@@ -51,7 +51,7 @@ models$add_model_file("one_cmt_f")
 models
 ```
 
-### Checking models
+### Checking what models are available
 
 One can see which models are available via the `available()` method
 
@@ -59,7 +59,7 @@ One can see which models are available via the `available()` method
 models$available()
 ```
 
-will print all models by name that can be invoked via `use()`
+will print all models by name, which can be invoked via `use()`
 
 ### Rmd (or other Rscript) files can now pull in all models to access
 
@@ -104,6 +104,8 @@ if (!interactive_model_check("vanco_stockmann.cpp")) {
 models <- Overseer$new()
 
 models$add_model_file("vanc_stockmann")
+
+models
 ```
 
 The interactive call will make sure this is only run when the code is executed
