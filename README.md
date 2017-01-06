@@ -51,15 +51,26 @@ models$add_model_file("one_cmt_f")
 models
 ```
 
+### Checking models
+
+One can see which models are available via the `available()` method
+
+```r
+models$available()
+```
+
+will print all models by name that can be invoked via `use()`
 
 ### Rmd (or other Rscript) files can now pull in all models to access
 
 ```r
 models <- source("path/to/models.R")$value
 # access models at any time with use
+# load directly (not recommended as will compile each time!)
 models$use("one_cmt_f") %>%
     ev(amt = 100, cmt = 1) %>% mrgsim %>% plot
 
+# better to save to an object then use that object
 one_cmt_f <- models$use("one_cmt_f")
 
 one_cmt_f %>% ev(amt = 200, cmt = 1) %>% mrgsim %>% plot
