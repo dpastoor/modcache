@@ -82,7 +82,7 @@ Overseer <- R6Class("Overseer",
                                 # for example:
                                 # Theoph --> Theoph.cpp
                                 # Theoph.cpp --> Theoph.cpp
-                                model_path <- paste0(strip_ext(normalizePath(.filepath)), ".cpp")
+                                model_path <- strip_ext(normalizePath(paste0(.filepath, ".cpp")))
                                 if(!file.exists(model_path)) {
                                     stop(paste0("model file not detected at: ", .filepath))
                                 }
@@ -122,7 +122,7 @@ Overseer <- R6Class("Overseer",
                                     warning("be careful referencing models by index as changes could result in subtle bugs,
                                             suggest referring to models by name")
                                 }
-                                model_details <- private$models
+                                model_details <- private$models[[model_name]]
                                 if (is.null(model_details$model_path)) {
                                     # covers models added from add_model()
                                     # should already be cached from mcode_cache
