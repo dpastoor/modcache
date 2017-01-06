@@ -82,7 +82,7 @@ Overseer <- R6Class("Overseer",
                                 # for example:
                                 # Theoph --> Theoph.cpp
                                 # Theoph.cpp --> Theoph.cpp
-                                model_path <- strip_ext(normalizePath(paste0(.filepath, ".cpp")))
+                                model_path <- normalizePath(paste0(strip_ext(.filepath), ".cpp"))
                                 if(!file.exists(model_path)) {
                                     stop(paste0("model file not detected at: ", .filepath))
                                 }
