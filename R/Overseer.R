@@ -68,15 +68,30 @@ Overseer <- R6Class("Overseer",
                                 if (is.null(model_name)) {
                                     model_name <- deparse(substitute(model))
                                 }
-                                private$models[[model_name]] <<- mcode_cache(model_name, model, private$cache_location)
+                                private$models[[model_name]] <<- list(
+                                    "model" = mcode_cache(model_name, model, private$cache_location),
+                                    "model_path" = NULL
+                                )
                             },
-                            add_model_file = function(file, model_name = NULL) {
+                            add_model_file = function(.filepath, model_name = NULL) {
                                 if (is.null(model_name)) {
-                                    model_name <- basename(file)
+                                    model_name <- strip_ext(basename(.filepath))
                                 }
-                                private$models[[model_name]] <<- mread_cache(model_name,
-                                                                             private$dir,
-                                                                             soloc = private$cache_location)
+                                # may or may not provide extension, want to flexibly pick it up
+                                # so will strip the .cpp if it was there, then add it back in
+                                # for example:
+                                # Theoph --> Theoph.cpp
+                                # Theoph.cpp --> Theoph.cpp
+                                model_path <- paste0(strip_ext(normalizePath(.filepath)), ".cpp")
+                                if(!file.exists(model_path)) {
+                                    stop(paste0("model file not detected at: ", .filepath))
+                                }
+                                # keep as list so open to save more information later,
+                                # details of model add time other otherwise
+                                private$models[[model_name]] <<- list(
+                                    "model_path" = model_path,
+                                    "model" = NULL
+                                )
                             },
                             add_model_directory = function(.dir = ".", pattern = "*.cpp") {
                                 cpp_files <- strip_ext(dir(.dir, pattern = pattern))
@@ -86,28 +101,45 @@ Overseer <- R6Class("Overseer",
                                     if (self$verbose) {
                                         message('adding model ', .file)
                                     }
-                                    private$models[[.file]] <<- mread_cache(.file, project_dir, soloc = private$cache_location)
+                                    self$add_model_file(file.path(project_dir, .file))
                                 }
                             },
-                            add_remote_model = function(.url) {
-                                model_name <- strip_ext(basename(.url))
-                                output_file <- file.path(private$dir, model_name)
+                            add_remote_model = function(.url, model_name = NULL) {
+                                if(is.null(model_name)) {
+                                    model_name <- strip_ext(basename(.url))
+                                }
+                                output_file <- file.path(private$dir, paste0(model_name, ".cpp"))
                                 if (!file.exists(output_file)) {
                                     message('fetching file from ', .url)
                                     model_from_url <- httr::GET(.url)
-                                    write(rawToChar(model_from_url$content), file = paste0(output_file, ".cpp"))
+                                    write(rawToChar(model_from_url$content), file = output_file)
                                 }
-                            self$add_model_file(model_name, model_name)
+                                self$add_model_file(output_file, model_name)
 
                             },
                             use = function(model_name) {
                                 if (is.numeric(model_name)) {
-                                    warning("be careful referencing models by index as changes could result in suble bugs,
+                                    warning("be careful referencing models by index as changes could result in subtle bugs,
                                             suggest referring to models by name")
                                 }
-                                return(private$models[[model_name]])
+                                model_details <- private$models
+                                if (is.null(model_details$model_path)) {
+                                    # covers models added from add_model()
+                                    # should already be cached from mcode_cache
+                                    return(model_details$model)
+                                }
+                                if (!file.exists(model_details$model_path)) {
+                                    stop(paste0("model file not detected at: ", model_details$model_path))
+                                }
+                                model_name <- strip_ext(basename(model_details$model_path))
+                                model_dir <- dirname(model_details$model_path)
+                                model <- mread_cache(model_name,
+                                                     model_dir,
+                                                     soloc = private$cache_location
+                                                     )
+                                return(model)
                             },
-                            list_models = function(details = FALSE) {
+                            available = function(details = FALSE) {
                                 names(private$models)
                             }
                         ),
