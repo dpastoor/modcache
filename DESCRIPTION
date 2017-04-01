@@ -11,6 +11,7 @@ Depends:
     R (>= 3.3.0)
 Imports:
     httr,
+    mrgsolve,
     R6
 Suggests:
     testthat
