@@ -1,8 +1,8 @@
 Package: overseer
 Type: Package
 Title: manage models across a project
-Version: 0.0.4
-Date: 2016-01-05
+Version: 1.0.0
+Date: 2017-07-05
 Authors@R: c(
     person("Devin", "Pastoor",
     email = "devin.pastoor@gmail.com", role = c("aut", "cre")))
@@ -12,9 +12,10 @@ Depends:
 Imports:
     httr,
     mrgsolve,
-    R6
+    R6,
+    purrr
 Suggests:
     testthat
 License: MIT + file LICENSE
 VignetteBuilder: knitr
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

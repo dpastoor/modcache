@@ -23,4 +23,3 @@ if (!interactive_model_check("my_model.cpp")) {
 }
 }
 }
-

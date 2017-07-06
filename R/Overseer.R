@@ -140,8 +140,12 @@ Overseer <- R6Class("Overseer",
                                                      )
                                 return(model)
                             },
-                            available = function(details = FALSE) {
-                                names(private$models)
+                            available = function(string = FALSE, details = FALSE) {
+                                if(string) {
+                                    return(names(private$models))
+                                }
+                                models <- tools::file_path_sans_ext(names(private_models))
+                                purrr::set_names(as.list(models), models)
                             }
                         ),
                     private = list(
