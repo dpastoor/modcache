@@ -2,6 +2,7 @@
 
 export(Overseer)
 export(interactive_model_check)
+export(source_models)
 importFrom(R6,R6Class)
 importFrom(mrgsolve,mcode_cache)
 importFrom(mrgsolve,mread_cache)
