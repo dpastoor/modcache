@@ -82,10 +82,13 @@ Overseer <- R6Class("Overseer",
                                 # for example:
                                 # Theoph --> Theoph.cpp
                                 # Theoph.cpp --> Theoph.cpp
-                                model_path <- normalizePath(paste0(file.path(private$dir,
-                                                                             strip_ext(.filepath)), ".cpp"))
+                                model_path <- paste0(strip_ext(.filepath), ".cpp")
+                                if (!is_abs(model_path)) {
+                                    model_path <- normalizePath(file.path(private$dir,
+                                                                                 model_path))
+                                }
                                 if(!file.exists(model_path)) {
-                                    stop(paste0("model file not detected at: ", .filepath))
+                                    stop(paste0("model file not detected at: ", model_path))
                                 }
                                 # keep as list so open to save more information later,
                                 # details of model add time other otherwise
@@ -95,14 +98,17 @@ Overseer <- R6Class("Overseer",
                                 )
                             },
                             add_model_directory = function(.dir = ".", pattern = "*.cpp") {
-                                cpp_files <- strip_ext(dir(.dir, pattern = pattern))
-                                project_dir <- normalizePath(file.path(private$dir, .dir))
+                                .dir <- ifelse(is_abs(.dir), .dir, file.path(private$dir, .dir))
+                                cpp_files <- strip_ext(normalizePath(dir(.dir, pattern = pattern, full.names = TRUE)))
+                                if (self$verbose) {
+                                  message(glue::glue("detected {length(cpp_files)} models"))
+                                }
                                 for (i in seq_along(cpp_files)) {
                                     .file <- cpp_files[i]
                                     if (self$verbose) {
                                         message('adding model ', .file)
                                     }
-                                    self$add_model_file(file.path(.dir, .file))
+                                    self$add_model_file(.file)
                                 }
                             },
                             add_remote_model = function(.url, model_name = NULL) {

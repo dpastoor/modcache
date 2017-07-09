@@ -80,3 +80,10 @@ cache_location <- function(.cache_dir = ".modcache") {
 strip_ext <- function(.filepath) {
     gsub("\\..+$", "", .filepath)
 }
+
+is_abs <- function(.x) {
+    # need normalizePath as well, as file_path_as_absolute
+    # on windows will change the double forward to single back slashes
+    # so re-normalize always to platform specific way
+    (normalizePath(tools::file_path_as_absolute(.x)) == normalizePath(.x)) && (.x != ".")
+}
