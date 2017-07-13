@@ -81,9 +81,12 @@ strip_ext <- function(.filepath) {
     gsub("\\..+$", "", .filepath)
 }
 
+safe_abs <- purrr::safely(tools::file_path_as_absolute, "NOTEXISTS__")
 is_abs <- function(.x) {
     # need normalizePath as well, as file_path_as_absolute
     # on windows will change the double forward to single back slashes
     # so re-normalize always to platform specific way
-    (normalizePath(tools::file_path_as_absolute(.x)) == normalizePath(.x)) && (.x != ".")
+
+    abs_x <- safe_abs(.x)
+    (normalizePath(safe_abs(.x)$result, mustWork = F) == normalizePath(.x, mustWork = FALSE)) && (.x != ".")
 }
